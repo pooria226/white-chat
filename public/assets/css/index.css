@@ -1,0 +1,84 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+.chat-online {
+  color: #34ce57;
+}
+
+.chat-offline {
+  color: #e4606d;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  max-height: 460px;
+  overflow-y: scroll;
+}
+.chat-messages::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 16px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 16px;
+}
+
+.chat-message-left,
+.chat-message-right {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.chat-message-left {
+  margin-right: auto;
+}
+
+.chat-message-right {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+.py-3 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.px-4 {
+  padding-right: 1.5rem !important;
+  padding-left: 1.5rem !important;
+}
+
+.flex-grow-0 {
+  flex-grow: 0 !important;
+}
+
+.border-top {
+  border-top: 1px solid #dee2e6 !important;
+}
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.badge {
+  border-radius: 50%;
+  box-shadow: 0 0 6px #007bff;
+}
+
+@media only screen and (max-width: 600px) {
+  .custome-radius {
+    min-height: inherit;
+  }
+  .chat-messages {
+    overflow-y: inherit;
+    max-height: inherit;
+  }
+}
