@@ -18,4 +18,27 @@ server.listen(PORT, () => {
 
 // Setup Socket
 
-io.on("connection", (socket) => {});
+const users = {};
+
+io.on("connection", (socket) => {
+  socket.on("send message", (data) => {
+    io.emit("send message", data);
+  });
+
+  socket.on("typing", (data) => {
+    socket.broadcast.emit("typing", data);
+  });
+
+  socket.on("login", ({ value }) => {
+    users[socket.id] = { id: socket.id, online: true, userName: value };
+    io.emit("login", { users });
+  });
+
+  socket.on("disconnect", () => {
+    if (!users[socket.id]?.userName) {
+      delete users[socket.id];
+    } else {
+      users[socket.id] = { ...users[socket.id], online: false };
+    }
+  });
+});

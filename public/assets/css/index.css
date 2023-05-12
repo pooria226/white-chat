@@ -7,14 +7,11 @@ body {
   color: #34ce57;
 }
 
-.chat-offline {
-  color: #e4606d;
-}
-
 .chat-messages {
   display: flex;
   flex-direction: column;
   max-height: 460px;
+  min-height: 460px;
   overflow-y: scroll;
 }
 .chat-messages::-webkit-scrollbar {
@@ -70,9 +67,24 @@ body {
 
 .badge {
   border-radius: 50%;
-  box-shadow: 0 0 6px #007bff;
+  box-shadow: 0 0 6px #e4606d;
 }
 
+.icon-chat {
+  background-color: #007bff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.modal-open .modal {
+  background: rgba(80, 82, 99, 0.76);
+  backdrop-filter: blur(4px);
+}
+
+.chat-offline {
+  color: #ffc107;
+}
 @media only screen and (max-width: 600px) {
   .custome-radius {
     min-height: inherit;
@@ -80,5 +92,6 @@ body {
   .chat-messages {
     overflow-y: inherit;
     max-height: inherit;
+    min-height: 320px;
   }
 }
