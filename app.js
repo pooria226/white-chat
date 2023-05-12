@@ -29,16 +29,21 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("typing", data);
   });
 
-  socket.on("login", ({ value }) => {
-    users[socket.id] = { id: socket.id, online: true, userName: value };
-    io.emit("login", { users });
+  socket.on("login", ({ value, id }) => {
+    console.log("users[socket.id]", users[socket.id]);
+    console.log("id", id);
+    if (users[socket.id]) {
+      if (users[socket.id] != id) {
+        users[socket.id] = { id: socket.id, online: true, userName: value };
+      }
+    } else {
+      users[socket.id] = { id: socket.id, online: true, userName: value };
+    }
+
+    io.emit("onlines", { users });
   });
 
   socket.on("disconnect", () => {
-    if (!users[socket.id]?.userName) {
-      delete users[socket.id];
-    } else {
-      users[socket.id] = { ...users[socket.id], online: false };
-    }
+    delete users[socket.id];
   });
 });

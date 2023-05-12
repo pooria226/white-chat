@@ -17,28 +17,51 @@ const form = document.querySelector("form[name=form-chat]"),
 // ************************
 
 socket.on("send message", (data) => {
-  chatBox.innerHTML += `
-            <div class="chat-message-right pb-4">
-                    <div>
-                            <img
-                                src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                class="rounded-circle mr-1"
-                                alt="Chris Wood"
-                                width="40"
-                                height="40"
-                            />
-                            <div class="text-muted small text-nowrap mt-2">
-                                2:33 am
-                            </div>
-                            </div>
-                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                            <div class="font-weight-bold mb-1">
-                            ${data.name}
-                            </div>
-                            ${data.value}
+  if (data.from == socket.id) {
+    chatBox.innerHTML += `
+    <div class="chat-message-right pb-4">
+            <div>
+                    <img
+                        src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                        class="rounded-circle mr-1"
+                        alt="Chris Wood"
+                        width="40"
+                        height="40"
+                    />
+                    <div class="text-muted small text-nowrap mt-2">
+                        2:33 am
                     </div>
+                    </div>
+                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                    <div class="font-weight-bold mb-1">
+                    ${data.name}
+                    </div>
+                    ${data.value}
             </div>
-  `;
+    </div>
+`;
+  } else {
+    chatBox.innerHTML += `
+    <div class="chat-message-left pb-4">
+                    <div>
+                      <img
+                        src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                        class="rounded-circle mr-1"
+                        alt="Sharon Lessman"
+                        width="40"
+                        height="40"
+                      />
+                      <div class="text-muted small text-nowrap mt-2">
+                        2:44 am
+                      </div>
+                    </div>
+                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                      <div class="font-weight-bold mb-1">  ${data.name}</div>
+                      ${data.value}
+                    </div>
+                  </div>
+`;
+  }
 });
 
 socket.on("typing", (data) => {
@@ -49,7 +72,7 @@ socket.on("typing", (data) => {
   }
 });
 
-socket.on("login", ({ users }) => {
+socket.on("onlines", ({ users }) => {
   onlines.innerHTML = ``;
   Object.keys(users).forEach(function (key, index) {
     onlines.innerHTML += `
@@ -99,6 +122,7 @@ form.addEventListener("submit", (e) => {
     socket.emit("send message", {
       value: input.value,
       name: localStorage.getItem("user"),
+      from: socket.id,
     });
 
     socket.emit("typing", {
@@ -130,7 +154,8 @@ buttonLogin.addEventListener("click", () => {
     localStorage.setItem("user", value);
     $(modalLogin).modal("hide");
     socket.emit("login", {
-      value,
+      value: localStorage.getItem("user"),
+      id: socket.id,
     });
   }
 });
@@ -138,6 +163,8 @@ buttonLogin.addEventListener("click", () => {
 if (!localStorage.getItem("user")) {
   $(modalLogin).modal("show");
 } else {
-  localStorage.removeItem("user");
-  $(modalLogin).modal("show");
+  socket.emit("login", {
+    value: localStorage.getItem("user"),
+    id: socket.id,
+  });
 }
